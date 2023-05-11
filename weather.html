@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App - Easy Tutorials</title>
+    <link rel="stylesheet" href="weather.css">
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="enter city name" spellcheck="false">
+             <button><img src="https://th.bing.com/th/id/OIP.rsZB5iKwX6totSXcV94swQHaHN?pid=ImgDet&rs=1"
+                style="height:40px" alt="not"></button>
+        </div>
+        
+        <div class="error">
+            <p>Invalid city name</p>
+        </div>
+
+        <div class="weather">
+            <img src="https://purepng.com/public/uploads/large/purepng.com-weather-iconsymbolsiconsapple-iosiosios-8-iconsios-8-721522596142qx4ep.png"
+            style="height:150px" class="weather-icon">
+            <h1 class="temp">22°C</h1>
+            <h2 class="city">New York</h2>
+            <div class="details">
+                <div class="col">
+                    <img src="https://cdn2.iconfinder.com/data/icons/weather-colored-icons/53/weather_26-512.png" 
+                    style="height:90px">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="https://cdn1.iconfinder.com/data/icons/hawcons/32/699847-icon-43-wind-512.png" 
+                     style="height:90px">
+                    <div>
+                        <p class="wind">15 km/h</p>
+                        <p>wind speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   <script>
+
+    const apikey="3a25618dc9e2e776e45c04a28393d6d8 ";
+    
+    const apiUrl=" https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+
+    const searchBox=document.querySelector(".search input");
+    const searchBtn=document.querySelector(".search button");
+    const weatherIcon =document.querySelector(".weather-icon");
+
+
+    async function checkWeather(city){
+        const response =await fetch(apiUrl +  city + `&appid=${apikey}`);
+
+
+        if(response.status==404){
+            document.querySelector(".error").style.display="block";
+            document.querySelector(".weather").style.display="none";
+        }else{
+            var data = await response.json();
+            
+
+        
+
+        document.querySelector(".city").innerHTML=data.name;
+        document.querySelector(".temp").innerHTML= Math.round(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerHTML=data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML=data.wind.speed + "km/h";
+
+
+        if(data.weather[0].main=="Clouds"){
+          weatherIcon.src ="https://cdn.iconscout.com/icon/free/png-512/summer-rain-clouds-cloudy-drop-weather-38945.png";
+        }
+        else if(data.weather[0].main=="Clear"){
+            weatherIcon.src ="https://cdn0.iconfinder.com/data/icons/weather-forecast-17/128/forecast-weather_sun-clear-hot-512.png";
+        }
+        else if(data.weather[0].main=="Rain"){
+            weatherIcon.src ="https://cdn3.iconfinder.com/data/icons/weather-flat-30/48/weather_cloud_forecast_sun_rain-512.png";
+        }
+        else if(data.weather[0].main=="Drizzle"){
+            weatherIcon.src ="https://th.bing.com/th/id/OIP.0IqiVwdPjyaiTLkHgDdIWAHaHa?pid=ImgDet&rs=1";
+        }
+        else if(data.weather[0].main=="Mist"){
+            weatherIcon.src ="https://cdn1.iconfinder.com/data/icons/weather-filled-outline-1/50/Weather_Filled_Outline-26-512.png";
+        }
+
+        document.querySelector(".weather").style.display="block";
+        document.querySelector(".error").style.display="none";
+
+
+        }
+
+        
+        
+    
+    
+    }
+
+    searchBtn.addEventListener("click", ()=>{
+        checkWeather(searchBox.value);
+    })
+
+    
+   </script>
+    
+</body>
+</html>
